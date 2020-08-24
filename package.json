@@ -25,6 +25,8 @@
     "@vue/cli-service": "~4.3.0",
     "@vue/eslint-config-typescript": "^5.0.2",
     "babel-eslint": "^10.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "typescript": "~3.9.3",
     "vue-template-compiler": "^2.6.11"
   },
@@ -35,7 +37,8 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "@vue/typescript"
+      "@vue/typescript",
+      "plugin:prettier/recommended"
     ],
     "parserOptions": {
       "parser": "@typescript-eslint/parser"
