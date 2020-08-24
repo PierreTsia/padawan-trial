@@ -9,6 +9,7 @@
     "server": "json-server --watch db.json"
   },
   "dependencies": {
+    "@vue/composition-api": "^1.0.0-beta.11",
     "core-js": "^3.6.4",
     "eslint": "^7.1.0",
     "eslint-plugin-vue": "^6.2.2",
