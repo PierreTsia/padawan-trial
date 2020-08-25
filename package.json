@@ -36,6 +36,8 @@
     "eslint-plugin-prettier": "^3.1.4",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
+    "stylus": "^0.54.8",
+    "stylus-loader": "^3.0.2",
     "typescript": "~3.9.3",
     "vue-cli-plugin-vuetify": "^2.0.7",
     "vue-cli-plugin-vuetify-preset-crane": "^1.0.3",
