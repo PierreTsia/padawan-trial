@@ -1,16 +1,25 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <h1>test</h1>
+    <pre>{{ isLoading }}</pre>
+    <pre>{{ sales }}</pre>
+    <pre>{{ error }}</pre>
   </div>
 </template>
 
 <script lang="ts">
-import HelloWorld from "@/components/HelloWorld.vue";
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, onMounted } from "@vue/composition-api";
+import { useFetchSales } from "@/composables/useFetchSales";
+
 const Home = defineComponent({
   name: "Home",
-  components: {
-    HelloWorld
+  components: {},
+  setup() {
+    const { isLoading, sales, fetchSales, error } = useFetchSales();
+    onMounted(async () => {
+      await fetchSales();
+    });
+    return { isLoading, sales, error };
   }
 });
 
