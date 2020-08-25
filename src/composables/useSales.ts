@@ -7,7 +7,7 @@ type FetchSalesState = {
   error: any;
 };
 
-export const useFetchSales = () => {
+export const useSales = () => {
   const BASE_URL = "http://localhost:3000";
   const state: FetchSalesState = reactive({
     isLoading: false,
@@ -15,6 +15,10 @@ export const useFetchSales = () => {
     error: null
   });
 
+  const createSale = async (saleInput: SaleInput): Promise<Sale> => {
+    const { data } = await axios.post(`${BASE_URL}/sales`, saleInput);
+    return new Sale(data);
+  };
   const fetchSales = async () => {
     state.isLoading = true;
     try {
@@ -26,5 +30,5 @@ export const useFetchSales = () => {
     state.isLoading = false;
   };
 
-  return { ...toRefs(state), fetchSales };
+  return { ...toRefs(state), fetchSales, createSale };
 };

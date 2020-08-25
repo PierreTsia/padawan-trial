@@ -1,5 +1,3 @@
-import axios from "axios";
-import VueCompositionApi from "@vue/composition-api";
 import Vue from "vue";
 import Vuetify from "vuetify";
 import { Sale } from "@/models/index.model";
@@ -25,34 +23,25 @@ export const mockSales = (length = 1): Sale[] =>
 
 const MOCK_SALES = mockSales(3);
 
-jest.mock("axios", () => ({
-  get: () => Promise.resolve({ data: MOCK_SALES })
-}));
-
-describe("|-> App.vue", () => {
+describe("|-> Home.vue", () => {
   let wrapper: Wrapper<any>;
   const localVue = createLocalVue();
-  localVue.use(VueCompositionApi);
   beforeEach(() => {
-    wrapper = shallowMount(Home, { localVue });
-  });
-  it("should fetch sales on mounted hook and return an array of Sales", async () => {
-    await wrapper.vm.$nextTick();
-    await flushPromises();
-    expect(wrapper.vm.$data.sales).toEqual(MOCK_SALES);
-    expect(wrapper.vm.$data.error).toEqual(null);
-    expect(wrapper.vm.$data.isLoading).toEqual(false);
+    wrapper = shallowMount(Home, {
+      localVue,
+      propsData: { sales: MOCK_SALES }
+    });
   });
 
   const loadingTestCases: [string, boolean][] = [
     ["loader", true],
-    ["list of sales with a sale items array as props", false]
+    ["list of sales", false]
   ];
 
   test.each(loadingTestCases)(
-    "should display a %s if loading state is  %s",
+    "should display a %s if isLoading is %s",
     async (elementToDisplay, isLoading) => {
-      wrapper.setData({ isLoading: isLoading });
+      wrapper.setProps({ isLoading: isLoading });
       await wrapper.vm.$nextTick();
       await flushPromises();
       const loader = wrapper.findComponent(Loader);

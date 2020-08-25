@@ -1,12 +1,14 @@
 <template>
   <v-col cols="12">
     <v-row align="start" justify="start">
-      <SalePreview
-        v-for="sale in sales"
-        :sale="sale"
-        :key="`sale-${sale.id}`"
-        class="col-md-4 col-sm-6"
-      />
+      <v-col
+        cols="12"
+        class="col-sm-6 col-md-4"
+        v-for="(sale, index) in sales"
+        :key="index"
+      >
+        <SalePreview :sale="sale" />
+      </v-col>
     </v-row>
   </v-col>
 </template>

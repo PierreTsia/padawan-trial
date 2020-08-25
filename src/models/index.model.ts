@@ -1,5 +1,8 @@
+import { v4 as uuidv4 } from "uuid";
+// ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+
 export interface SaleInput {
-  id: string | number;
+  id?: string | number;
   title: string;
   description: string;
 }
@@ -14,7 +17,7 @@ export class Sale {
   private title: string;
   private description: string;
   constructor(saleInput: SaleInput) {
-    this.id = `${saleInput.id}`;
+    this.id = saleInput.id ? `${saleInput.id}` : uuidv4();
     this.title = saleInput.title;
     this.description = saleInput.description;
   }

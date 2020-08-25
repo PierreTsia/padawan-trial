@@ -14,20 +14,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "@vue/composition-api";
-import { useFetchSales } from "@/composables/useFetchSales";
+import { defineComponent, onMounted, ref } from "@vue/composition-api";
 import Loader from "@/components/base/Loader.vue";
 import SalesList from "@/components/SalesList.vue";
+import { Sale } from "@/models/index.model";
+
 const Home = defineComponent({
   name: "Home",
   components: { Loader, SalesList },
-  setup() {
-    const { isLoading, sales, fetchSales, error } = useFetchSales();
-    onMounted(async () => {
-      await fetchSales();
-    });
-    return { isLoading, sales, error };
-  }
+  props: ["sales", "isLoading", "error"],
+  setup({
+    sales,
+    isLoading,
+    error
+  }: {
+    sales: Sale[];
+    isLoading: boolean;
+    error: string;
+  }) {}
 });
 
 export default Home;
