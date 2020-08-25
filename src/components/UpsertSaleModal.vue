@@ -78,7 +78,6 @@ const UpsertSaleModal = defineComponent({
         title: state.title,
         description: state.description
       });
-      console.log(sale);
       emit("onSave", sale);
     };
     return { ...toRefs(state), saveSaleInput };

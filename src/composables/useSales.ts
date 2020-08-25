@@ -4,6 +4,7 @@ import axios from "axios";
 type FetchSalesState = {
   isLoading: boolean;
   sales: Sale[];
+  items: SaleItem[];
   error: any;
 };
 
@@ -12,6 +13,7 @@ export const useSales = () => {
   const state: FetchSalesState = reactive({
     isLoading: false,
     sales: [],
+    items: [],
     error: null
   });
 
@@ -30,5 +32,17 @@ export const useSales = () => {
     state.isLoading = false;
   };
 
-  return { ...toRefs(state), fetchSales, createSale };
+  const fetchItems = async () => {
+    state.isLoading = true;
+    try {
+      const { data } = await axios.get(`${BASE_URL}/items`);
+      console.log(data);
+      state.items = data.map((saleItem: any) => new SaleItem(saleItem));
+    } catch (e) {
+      state.error = e;
+    }
+    state.isLoading = false;
+  };
+
+  return { ...toRefs(state), fetchSales, fetchItems, createSale };
 };

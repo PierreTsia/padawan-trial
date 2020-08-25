@@ -7,7 +7,10 @@
         v-for="(sale, index) in sales"
         :key="index"
       >
-        <SalePreview :sale="sale" />
+        <SalePreview
+          :sale="sale"
+          @onViewItems="saleId => $emit('onViewItems', saleId)"
+        />
       </v-col>
     </v-row>
   </v-col>

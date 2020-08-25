@@ -3,9 +3,9 @@
     <v-card-title class="headline text-center">{{ sale.title }}</v-card-title>
     <v-card-subtitle>{{ sale.description }}</v-card-subtitle>
     <v-card-actions class="d-flex justify-center">
-      <v-btn outlined
+      <v-btn outlined @click="$emit('onViewItems', sale.id)"
         ><v-icon class="mr-2">mdi-lamps</v-icon>
-        View sale details
+        items
       </v-btn>
     </v-card-actions>
   </v-card>
