@@ -20,7 +20,8 @@
         :dialog="showModal.saleItems"
         :saleName="activeSaleName"
         :items="activeSaleItems"
-        @onCancel="toggleModal('saleItems')"
+        @onClose="toggleModal('saleItems')"
+        @onItemCreated="addItem"
       />
     </v-main>
   </v-app>
@@ -50,7 +51,6 @@ const App = defineComponent({
       await fetchSales();
       await fetchItems();
     });
-
     const {
       isLoading,
       sales,
@@ -58,6 +58,7 @@ const App = defineComponent({
       fetchItems,
       error,
       createSale,
+      createItem,
       itemsBySaleId
     } = useSales();
 
@@ -68,29 +69,37 @@ const App = defineComponent({
     const toggleModal = (modal: "upsertSale" | "saleItems") =>
       (showModal[modal] = !showModal[modal]);
 
+    const setActiveSale = (saleId: string) => {
+      activeSaleId.value = saleId;
+      toggleModal("saleItems");
+    };
     const activeSaleId: Ref<string | null> = ref(null);
     const activeSaleName: ComputedRef<string> = computed(
       () =>
         sales.value.find(sale => sale?.id === activeSaleId.value)?.title ?? ""
     );
     const activeSaleItems: ComputedRef<SaleItem[]> = computed(() =>
-      activeSaleId?.value ? itemsBySaleId.value[activeSaleId.value] : []
+      activeSaleId?.value ? itemsBySaleId.value[activeSaleId.value] ?? [] : []
     );
-
-    const setActiveSale = (saleId: string) => {
-      activeSaleId.value = saleId;
-      toggleModal("saleItems");
-    };
 
     const addSale = async (saleInput: SaleInput) => {
       await createSale(saleInput);
       toggleModal("upsertSale");
     };
 
+    const addItem = async (description: string) => {
+      const newItem = new SaleItem({
+        description,
+        sale_id: activeSaleId.value!
+      });
+      await createItem(newItem);
+    };
+
     return {
       showModal,
       toggleModal,
       addSale,
+      addItem,
       sales,
       error,
       isLoading,

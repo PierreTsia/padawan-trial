@@ -12,7 +12,7 @@ export const generateSale = (index: number, label = "test") =>
   [label].map(
     title =>
       new Sale({
-        id: `${index}`,
+        id: `mockId-${index}`,
         title: `${title}-${index}`,
         description: `${title}-description-${index}`
       })

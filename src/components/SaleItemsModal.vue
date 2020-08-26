@@ -2,38 +2,57 @@
   <v-dialog v-model="dialog" persistent max-width="600px">
     <v-card>
       <v-card-title>
-        <h2 class="headline">Create a Sale</h2>
+        <h2 class="headline">{{ saleName }}</h2>
       </v-card-title>
       <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12" sm="12">
-              <v-text-field label="Title*" required></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="12">
-              <v-textarea
-                label="Description*"
-                hint="example of helper text only on focus"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-        </v-container>
-        <small>*indicates required field</small>
+        <v-list-item v-if="!items.length">
+          <v-list-item-content>
+            <v-list-item-title class="text-wrap"
+              >No items yet. Click below to add a new one</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-for="item in items" :key="item.id">
+          <v-list-item-content>
+            <v-list-item-title class="text-wrap">{{
+              item.description
+            }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="isEditMode">
+          <v-list-item-content>
+            <v-textarea
+              v-model="description"
+              label="Description*"
+              hint="example of helper text only on focus"
+            ></v-textarea>
+          </v-list-item-content>
+        </v-list-item>
       </v-card-text>
+
       <v-card-actions class="px-8 pb-4">
         <v-spacer></v-spacer>
         <v-btn
           class="ma-2 action-btn action-btn-cancel"
           outlined
           color="primary"
-          @click="$emit('onCancel')"
+          @click="handleCloseClick"
         >
-          <v-icon class="mr-2">mdi-lamps</v-icon>
-          Cancel
+          <v-icon class="mr-2">
+            {{ isEditMode ? "mdi-cancel" : "mdi-close" }}</v-icon
+          >
+          {{ isEditMode ? "cancel" : "close" }}
         </v-btn>
 
-        <v-btn color="primary action-btn action-btn-cancel"
-          ><v-icon class="mr-2">mdi-floppy</v-icon> Save</v-btn
+        <v-btn
+          color="primary"
+          dense
+          @click="handleConfirmClick"
+          :disabled="isEditMode ? description.length < 5 : false"
+          ><v-icon class="mr-2">
+            {{ isEditMode ? "mdi-check-circle" : "mdi-plus-circle" }}</v-icon
+          >
+          {{ isEditMode ? "confirm" : "add new item" }}</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -41,11 +60,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, ref } from "@vue/composition-api";
 
 const SaleItemsModal = defineComponent({
   name: "SaleItemsModal",
-  props: ["dialog", "saleName", "items"]
+  props: ["dialog", "saleName", "items"],
+  setup(_, { emit }) {
+    const isEditMode = ref(false);
+    const description = ref("");
+    const handleCloseClick = () => {
+      if (isEditMode.value) {
+        isEditMode.value = !isEditMode.value;
+      } else {
+        emit("onClose", description.value);
+      }
+    };
+    const handleConfirmClick = () => {
+      if (isEditMode.value) {
+        emit("onItemCreated", description.value);
+        description.value = "";
+      }
+      isEditMode.value = !isEditMode.value;
+    };
+    return { isEditMode, description, handleConfirmClick, handleCloseClick };
+  }
 });
 
 export default SaleItemsModal;

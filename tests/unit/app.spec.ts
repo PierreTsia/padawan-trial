@@ -2,6 +2,7 @@
 import App from "@/App";
 import Home from "@/views/Home.vue";
 import UpsertSaleModal from "@/components/UpsertSaleModal.vue";
+import SaleItemsModal from "@/components/SaleItemsModal.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
 import VueCompositionApi from "@vue/composition-api";
@@ -9,16 +10,33 @@ import { shallowMount, Wrapper, createLocalVue } from "@vue/test-utils";
 import "@testing-library/jest-dom";
 import flushPromises from "flush-promises";
 import { mockSales } from "./home.spec";
-import { Sale, SaleInput } from "@/models/index.model";
 Vue.use(Vuetify);
 
 const MOCK_SALES = mockSales(3);
 
 jest.mock("axios", () => ({
-  get: () => Promise.resolve({ data: MOCK_SALES }),
-  post: () => {
+  get: (url: string) => {
+    const resolvedData = url.endsWith("/sales") ? MOCK_SALES : [];
+    return Promise.resolve({ data: resolvedData });
+  },
+  post: (url: string) => {
+    const entityType = url.endsWith("/sales") ? "saleInput" : "itemInput";
+    const resolvedEntity: {
+      id: string;
+      description: string;
+      title: string;
+      sale_id?: string;
+    } = {
+      title: `${entityType}.title`,
+      description: `${entityType}.description`,
+      id: `${entityType}.mockId`
+    };
+    if (entityType === "itemInput") {
+      resolvedEntity["sale_id"] = `${entityType}.mockSaleId`;
+    }
+
     return Promise.resolve({
-      data: { title: "saleInput.title", description: "saleInput.description" }
+      data: resolvedEntity
     });
   }
 }));
@@ -55,7 +73,7 @@ describe("|-> App.vue", () => {
   });
 
   it("should add a sale if modal emits 'onSave'", async () => {
-    wrapper.vm.$data.toggleModal("upsertSale");;
+    wrapper.vm.$data.toggleModal("upsertSale");
     const [saleInput] = mockSales();
     const initialSalesCount = wrapper.vm.$data.sales.length;
 
@@ -73,5 +91,33 @@ describe("|-> App.vue", () => {
       title: "saleInput.title",
       description: "saleInput.description"
     });
+  });
+
+  it("should display an items modals with an item list when an active sale is set", async () => {
+    expect(wrapper.findComponent(SaleItemsModal).vm.$el).not.toBeVisible();
+    const home = wrapper.findComponent(Home);
+    home.vm.$emit("onViewItems", MOCK_SALES[0].id);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.$data.activeSaleId).toEqual(MOCK_SALES[0].id);
+    expect(wrapper.findComponent(SaleItemsModal).vm.$el).toBeVisible();
+  });
+
+  it("should add an item if items modal emits @onItemCreated", async () => {
+    const home = wrapper.findComponent(Home);
+    home.vm.$emit("onViewItems", "itemInput.mockSaleId");
+    await wrapper.vm.$nextTick();
+    const itemModal = wrapper.findComponent(SaleItemsModal);
+    expect(wrapper.vm.$data.activeSaleItems).toHaveLength(0);
+    itemModal.vm.$emit("onItemCreated", "test-description");
+    await wrapper.vm.$nextTick();
+    await flushPromises();
+    expect(wrapper.vm.$data.activeSaleItems).toEqual([
+      {
+        id: "itemInput.mockId",
+        title: "itemInput.title",
+        description: "itemInput.description",
+        sale_id: "itemInput.mockSaleId"
+      }
+    ]);
   });
 });

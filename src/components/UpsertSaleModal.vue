@@ -33,7 +33,7 @@
           color="primary"
           @click="$emit('onCancel')"
         >
-          <v-icon class="mr-2">mdi-lamps</v-icon>
+          <v-icon class="mr-2">mdi-cancel</v-icon>
           Cancel
         </v-btn>
 

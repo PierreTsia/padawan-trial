@@ -32,6 +32,11 @@ export const useSales = () => {
     const { data } = await axios.post(`${BASE_URL}/sales`, saleInput);
     state.sales.push(new Sale(data));
   };
+  const createItem = async (saleItem: SaleItem) => {
+    const { data } = await axios.post(`${BASE_URL}/items`, saleItem);
+    state.items.push(new SaleItem(data));
+  };
+
   const fetchSales = async () => {
     state.isLoading = true;
     try {
@@ -59,6 +64,7 @@ export const useSales = () => {
     fetchSales,
     fetchItems,
     createSale,
+    createItem,
     itemsBySaleId
   };
 };
