@@ -43,19 +43,19 @@ describe("|-> App.vue", () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.findComponent(Home).vm.$el).toBeVisible();
   });
-  it("should have a modal component visible only if dialog === true", async () => {
+  it("should display upsertSale modal if showModal.upsertSale is true ", async () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.findComponent(UpsertSaleModal).vm.$el).not.toBeVisible();
-    expect(wrapper.vm.$data.dialog).toBeFalsy();
+    expect(wrapper.vm.$data.showModal.upsertSale).toBeFalsy();
     //TODO: change for an emited event from Child Component
-    wrapper.vm.$data.toggleDialog();
+    wrapper.vm.$data.toggleModal("upsertSale");
     await wrapper.vm.$nextTick();
-    expect(wrapper.vm.$data.dialog).toBeTruthy();
+    expect(wrapper.vm.$data.showModal.upsertSale).toBeTruthy();
     expect(wrapper.findComponent(UpsertSaleModal).vm.$el).toBeVisible();
   });
 
   it("should add a sale if modal emits 'onSave'", async () => {
-    wrapper.vm.$data.toggleDialog();
+    wrapper.vm.$data.toggleModal("upsertSale");;
     const [saleInput] = mockSales();
     const initialSalesCount = wrapper.vm.$data.sales.length;
 

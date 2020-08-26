@@ -13,9 +13,9 @@ interface SaleItemInput extends SaleInput {
 
 export class Sale {
   // todo better type
-  private id?: string;
-  private title?: string;
-  private description: string;
+  public id?: string;
+  public title?: string;
+  public description: string;
   constructor(saleInput: SaleInput) {
     this.id = saleInput?.id ?? uuidv4();
     if (saleInput.title) {

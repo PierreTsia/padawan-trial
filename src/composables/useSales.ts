@@ -1,4 +1,4 @@
-import { reactive, ref, toRefs } from "@vue/composition-api";
+import { computed, reactive, ref, toRefs } from "@vue/composition-api";
 import { Sale, SaleItem, SaleInput } from "@/models/index.model";
 import axios from "axios";
 type FetchSalesState = {
@@ -7,6 +7,8 @@ type FetchSalesState = {
   items: SaleItem[];
   error: any;
 };
+
+type ItemsBySale = { [saleId: string]: SaleItem[] };
 
 export const useSales = () => {
   const BASE_URL = "http://localhost:3000";
@@ -17,9 +19,18 @@ export const useSales = () => {
     error: null
   });
 
-  const createSale = async (saleInput: SaleInput): Promise<Sale> => {
+  const itemsBySaleId = computed(() =>
+    state.items.reduce((items, item) => {
+      items[item.sale_id]
+        ? items[item.sale_id].push(item)
+        : (items[item.sale_id] = [item]);
+      return items;
+    }, {} as ItemsBySale)
+  );
+
+  const createSale = async (saleInput: SaleInput) => {
     const { data } = await axios.post(`${BASE_URL}/sales`, saleInput);
-    return new Sale(data);
+    state.sales.push(new Sale(data));
   };
   const fetchSales = async () => {
     state.isLoading = true;
@@ -36,7 +47,6 @@ export const useSales = () => {
     state.isLoading = true;
     try {
       const { data } = await axios.get(`${BASE_URL}/items`);
-      console.log(data);
       state.items = data.map((saleItem: any) => new SaleItem(saleItem));
     } catch (e) {
       state.error = e;
@@ -44,5 +54,11 @@ export const useSales = () => {
     state.isLoading = false;
   };
 
-  return { ...toRefs(state), fetchSales, fetchItems, createSale };
+  return {
+    ...toRefs(state),
+    fetchSales,
+    fetchItems,
+    createSale,
+    itemsBySaleId
+  };
 };

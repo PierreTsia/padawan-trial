@@ -8,7 +8,21 @@
       </v-row>
     </div>
     <div class="container fill-height align-content-start" v-else>
-      <SalesList :sales="sales" />
+      <v-col cols="12">
+        <v-row align="start" justify="start">
+          <v-col
+            v-for="(sale, index) in sales"
+            cols="12"
+            class="col-sm-6 col-md-4"
+            :key="index"
+          >
+            <SalePreview
+              :sale="sale"
+              @onViewItems="saleId => $emit('onViewItems', saleId)"
+            />
+          </v-col>
+        </v-row>
+      </v-col>
     </div>
   </div>
 </template>
@@ -16,12 +30,13 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "@vue/composition-api";
 import Loader from "@/components/base/Loader.vue";
-import SalesList from "@/components/SalesList.vue";
+import SalePreview from "@/components/SalePreview.vue";
+
 import { Sale } from "@/models/index.model";
 
 const Home = defineComponent({
   name: "Home",
-  components: { Loader, SalesList },
+  components: { Loader, SalePreview },
   props: ["sales", "isLoading", "error"],
   setup({
     sales,

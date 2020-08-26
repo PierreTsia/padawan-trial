@@ -2,10 +2,10 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import { Sale } from "@/models/index.model";
 import Loader from "@/components/base/Loader.vue";
-import SalesList from "@/components/SalesList.vue";
 import { shallowMount, Wrapper, createLocalVue } from "@vue/test-utils";
 import flushPromises from "flush-promises";
 import Home from "@/views/Home.vue";
+import SalePreview from "@/components/SalePreview.vue";
 Vue.use(Vuetify);
 
 export const generateSale = (index: number, label = "test") =>
@@ -45,11 +45,11 @@ describe("|-> Home.vue", () => {
       await wrapper.vm.$nextTick();
       await flushPromises();
       const loader = wrapper.findComponent(Loader);
-      const salesList = wrapper.findComponent(SalesList);
+      const salesPreviews = wrapper.findAllComponents(SalePreview);
       expect(loader.exists()).toEqual(isLoading);
-      expect(salesList.exists()).toEqual(!isLoading);
+      expect(salesPreviews.exists()).toEqual(!isLoading);
       if (!isLoading) {
-        expect(salesList.props().sales).toEqual(MOCK_SALES);
+        expect(salesPreviews.length).toEqual(MOCK_SALES.length);
       }
     }
   );
