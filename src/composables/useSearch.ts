@@ -23,7 +23,6 @@ export const useSearch = () => {
     entities.reduce(
       (entitiesByType: { items: SaleItem[]; sales: Sale[] }, entity) => {
         if (isItem(entity)) {
-          console.log(entity);
           entitiesByType.items.push(entity);
         } else {
           entitiesByType.sales.push(entity);

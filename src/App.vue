@@ -32,6 +32,11 @@
         :sales="sales"
         @onClose="toggleModal('search')"
       />
+      <v-snackbar v-model="showModal.snackbar">
+        <v-img
+          src="https://i.pinimg.com/originals/6c/90/28/6c90288d7e10d46d18895f17f420a92c.gif"
+        ></v-img>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -42,11 +47,13 @@ import {
   ref,
   Ref,
   onMounted,
+  onBeforeUnmount,
   reactive,
   computed,
   ComputedRef
 } from "@vue/composition-api";
 import { useSales } from "@/composables/useSales";
+import { useKonamiCode } from "@/composables/useKonamiCode";
 import Home from "./views/Home.vue";
 import UpsertSaleModal from "@/components/UpsertSaleModal.vue";
 import SaleItemsModal from "@/components/SaleItemsModal.vue";
@@ -60,6 +67,10 @@ const App = defineComponent({
     onMounted(async () => {
       await fetchSales();
       await fetchItems();
+      start();
+    });
+    onBeforeUnmount(() => {
+      stop();
     });
     const {
       isLoading,
@@ -73,10 +84,14 @@ const App = defineComponent({
       items
     } = useSales();
 
+    const easterEgg = () => (showModal.snackbar = true);
+    const { start, stop } = useKonamiCode(easterEgg);
+
     const showModal = reactive({
       upsertSale: false,
       saleItems: false,
-      search: false
+      search: false,
+      snackbar: false
     });
     const toggleModal = (modal: "upsertSale" | "saleItems" | "search") =>
       (showModal[modal] = !showModal[modal]);

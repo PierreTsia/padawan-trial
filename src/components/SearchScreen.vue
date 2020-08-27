@@ -131,7 +131,6 @@ const SearchScreen = defineComponent({
   name: "SearchScreen",
   props: ["dialog", "sales", "items"],
   setup(props) {
-    console.log(props);
     const { searchResults, searchByKeyWords } = useSearch();
     const activeSearchIndex = ref(0);
     const searchQuery = ref("");
