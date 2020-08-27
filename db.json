@@ -4,46 +4,6 @@
       "id": "083bb9ca-97g8-46cd-9228-d602a9640b87",
       "title": "Belle vente mobilière",
       "description": "Suite à successions : vente de beau mobilier, objets d'art, tableaux anciens et modernes, pendule en bronze doré ..."
-    },
-    {
-      "id": "ef96178d-15d4-4e74-a77c-bb18a20af270",
-      "title": "another sale",
-      "description": "description 3"
-    },
-    {
-      "id": "083bb9ca-97f8-46cd-9228-d602a9840b87",
-      "title": "dsqdqsd",
-      "description": "dqsdqsd"
-    },
-    {
-      "id": "9e9e228f-4e9e-4020-ba77-e1bb1a5f3487",
-      "title": "Aff a sale",
-      "description": "sqdsqdfsd"
-    },
-    {
-      "id": "ebff8a48-71db-4ba1-820a-bd7292e38baa",
-      "title": "ssssccccc",
-      "description": "skjlksjlkjsl"
-    },
-    {
-      "id": "9fa331a9-89d9-4bb3-b23c-9e4fa0196a42",
-      "title": "rterterterter",
-      "description": "terteeterterte"
-    },
-    {
-      "id": "0a5de5b3-a76e-4973-ad8d-93d9dacb7ba8",
-      "title": "qsddqsdqsdqsd",
-      "description": "dqsdqdqsdqs"
-    },
-    {
-      "id": "3153dc8f-30cf-47a9-b1e1-a4c0eb317d91",
-      "title": "fhjjkhfsjkhfjksdf",
-      "description": "fsdfsdfsdfsdfsdf"
-    },
-    {
-      "id": "e07346f9-db73-489f-8ad2-3249ed8f5935",
-      "title": "Saluit nounou",
-      "description": "fdsssssssssssssssssssssss"
     }
   ],
   "items": [
@@ -56,6 +16,11 @@
       "id": "063cb9ce-95g8-46cd-4228-d602a9640b87",
       "sale_id": "083bb9ca-97g8-46cd-9228-d602a9640b87",
       "description": "Ecole Française fin XIXème 'E. De Varine Bohan','Portrait du chevalier du Haumel'. Huile sur toile signée en gravure sur la cadre et derrière 1896. Dimensions : 93 X 73 cm. Cadre style régence."
+    },
+    {
+      "id": "5c26b378-4666-4ab4-8563-3122bf2dd28b",
+      "description": "A super cool item from very long ago",
+      "sale_id": "083bb9ca-97g8-46cd-9228-d602a9640b87"
     }
   ]
 }

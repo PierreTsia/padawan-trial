@@ -2,6 +2,9 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
+      <v-btn icon @click="toggleModal('search')">
+        <v-icon>mdi-magnify-plus</v-icon>
+      </v-btn>
       <v-btn text @click="toggleModal('upsertSale')" class="dialog-toggle">
         <span class="mr-2">Create New Sale</span>
         <v-icon>mdi-gavel</v-icon>
@@ -23,6 +26,12 @@
         @onClose="toggleModal('saleItems')"
         @onItemCreated="addItem"
       />
+      <SearchScreen
+        :dialog="showModal.search"
+        :items="items"
+        :sales="sales"
+        @onClose="toggleModal('search')"
+      />
     </v-main>
   </v-app>
 </template>
@@ -41,11 +50,12 @@ import { useSales } from "@/composables/useSales";
 import Home from "./views/Home.vue";
 import UpsertSaleModal from "@/components/UpsertSaleModal.vue";
 import SaleItemsModal from "@/components/SaleItemsModal.vue";
+import SearchScreen from "@/components/SearchScreen.vue";
 import { SaleInput, Sale, SaleItem } from "@/models/index.model";
 
 const App = defineComponent({
   name: "App",
-  components: { SaleItemsModal, UpsertSaleModal, Home },
+  components: { SaleItemsModal, SearchScreen, UpsertSaleModal, Home },
   setup() {
     onMounted(async () => {
       await fetchSales();
@@ -59,14 +69,16 @@ const App = defineComponent({
       error,
       createSale,
       createItem,
-      itemsBySaleId
+      itemsBySaleId,
+      items
     } = useSales();
 
     const showModal = reactive({
       upsertSale: false,
-      saleItems: false
+      saleItems: false,
+      search: false
     });
-    const toggleModal = (modal: "upsertSale" | "saleItems") =>
+    const toggleModal = (modal: "upsertSale" | "saleItems" | "search") =>
       (showModal[modal] = !showModal[modal]);
 
     const setActiveSale = (saleId: string) => {
@@ -101,6 +113,7 @@ const App = defineComponent({
       addSale,
       addItem,
       sales,
+      items,
       error,
       isLoading,
       itemsBySaleId,

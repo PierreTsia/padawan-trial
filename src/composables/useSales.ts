@@ -1,5 +1,5 @@
 import { computed, reactive, ref, toRefs } from "@vue/composition-api";
-import { Sale, SaleItem, SaleInput } from "@/models/index.model";
+import { Sale, SaleItem, SaleInput, isItem } from "@/models/index.model";
 import axios from "axios";
 type FetchSalesState = {
   isLoading: boolean;
@@ -37,6 +37,15 @@ export const useSales = () => {
     state.items.push(new SaleItem(data));
   };
 
+  const saleName = (item: Sale | SaleItem) => {
+    return isItem(item)
+      ? findSale(item.sale_id)?.title ?? "not found"
+      : item.title;
+  };
+
+  const findSale = (saleId: string) =>
+    state.sales.find((sale: Sale) => sale.id === saleId);
+
   const fetchSales = async () => {
     state.isLoading = true;
     try {
@@ -65,6 +74,7 @@ export const useSales = () => {
     fetchItems,
     createSale,
     createItem,
+    saleName,
     itemsBySaleId
   };
 };

@@ -32,3 +32,6 @@ export class SaleItem extends Sale {
     this.sale_id = obj?.sale_id ?? uuidv4();
   }
 }
+
+export const isItem = (entity: Sale | SaleItem): entity is SaleItem =>
+  !!(entity as SaleItem).sale_id;
